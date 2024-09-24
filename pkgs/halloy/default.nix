@@ -13,6 +13,7 @@
   vulkan-loader,
   wayland,
   xorg,
+  alsa-lib
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,11 +24,18 @@ rustPlatform.buildRustPackage rec {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-OxxXjenZjP+3KrkxyXYxOXRFmrYm3deeiCuGrhpnF2I=";
+    hash = "sha256-NEm6qsU/Kes1rtNCsEauShpJZzrhBtOqo70uzrWpYtE=";
   };
 
+  cargoHash = "";
   cargoLock = {
     lockFile = ./Cargo.lock;
+    
+    outputHashes = {
+      "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
+      "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
+      "iced-0.13.0-dev" = "sha256-VXaE4+qXakYSyO5rcBbCe4QuJv/oguxdqUEbhXfmh2U=";
+    };
   };
 
   nativeBuildInputs = [
@@ -45,6 +53,7 @@ rustPlatform.buildRustPackage rec {
       xorg.libXcursor
       xorg.libXi
       xorg.libXrandr
+      alsa-lib
     ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
