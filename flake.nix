@@ -11,6 +11,12 @@
   outputs = { flake-parts, ... }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } ( { lib, ... }: {
       systems = lib.systems.flakeExposed;
+      perSystem = { system, ... }: {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      };
       imports = [ ./pkgs/flake-module.nix ];
     });
 }
