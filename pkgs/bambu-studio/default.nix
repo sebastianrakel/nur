@@ -5,8 +5,8 @@ let
 
   src = fetchurl {
     url =
-      "https://github.com/bambulab/BambuStudio/releases/download/v02.02.00.85/Bambu_Studio_ubuntu-24.04_PR-7829.AppImage";
-    hash = "sha256-kj1vT5PTlM8Sa/cxxIFlqle4ouPTN/Ogp8DQ+Gjbg0M=";
+      "https://github.com/bambulab/BambuStudio/releases/download/v02.04.00.70/Bambu_Studio_ubuntu-24.04_PR-8834.AppImage";
+    hash = "sha256-JrwH3MsE3y5GKx4Do3ZlCSAcRuJzEqFYRPb11/3x3r0=";
   };
 in appimageTools.wrapType2 {
   inherit pname version src;
