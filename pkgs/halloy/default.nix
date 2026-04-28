@@ -4,16 +4,16 @@
 
 pkgs.unstable.rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2026.4";
+  version = "2026.6";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-gWN+KcAoMTRySZObRleDCNfUukprGkNGFELD7xT/x/Q=";
+    hash = "sha256-5lgsZnjoajYQi7y+ZWhNSc2x9IpxkGEEDTnQC8NJaP4=";
   };
 
-  cargoHash = "sha256-g9Q2YCjgC5MBX/Tv/dvRuHIxo7qq5J7hjsw3YeTn0jI=";
+  cargoHash = "sha256-9EVJGXWE4kfTWs+Ekr13rweH/mcSNG7jmXOMjEMn4hM=";
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper pkg-config ];
 
