@@ -20,12 +20,15 @@
               config.allowUnfree = true;
             };
           };
+          overlay-bundler = final: prev: {
+            bundlerApp = prev.bundlerApp.override { ruby = prev.ruby_4_0; };
+          };
         in {
 
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
             config.allowUnfree = true;
-            overlays = [ overlay-unstable ];
+            overlays = [ overlay-unstable overlay-bundler ];
           };
         };
       imports = [ ./pkgs/flake-module.nix ];
