@@ -33,13 +33,8 @@ GEM
     colored2 (4.0.3)
     concurrent-ruby (1.3.6)
     cri (2.15.12)
-    date (3.5.1)
-    debug (1.11.0)
-      irb (~> 1.10)
-      reline (>= 0.3.8)
     deep_merge (1.2.2)
     ed25519 (1.4.0)
-    erb (6.0.1)
     erubi (1.13.1)
     faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
@@ -88,10 +83,6 @@ GEM
     httpclient (2.9.0)
       mutex_m
     io-console (0.8.2)
-    irb (1.16.0)
-      pp (>= 0.6.0)
-      rdoc (>= 4.0.0)
-      reline (>= 0.4.2)
     jmespath (1.6.2)
     json (2.18.0)
     jwt (2.10.2)
@@ -167,15 +158,9 @@ GEM
       yard (~> 0.9)
     optimist (3.2.1)
     ostruct (0.6.3)
-    pp (0.6.3)
-      prettyprint
-    prettyprint (0.2.0)
     prime (0.1.4)
       forwardable
       singleton
-    psych (5.3.1)
-      date
-      stringio
     public_suffix (7.0.0)
     puppet-resource_api (2.0.0)
       hocon (>= 1.0)
@@ -198,12 +183,6 @@ GEM
       multi_json (~> 1.10)
       puppet_forge (>= 4.1.0, < 7)
     racc (1.8.1)
-    rbs (3.9.5)
-      logger
-    rdoc (7.0.1)
-      erb
-      psych (>= 4.0.0)
-      tsort
     reline (0.6.3)
       io-console (~> 0.5)
     rexml (3.4.4)
@@ -218,12 +197,10 @@ GEM
     scanf (1.0.0)
     semantic_puppet (1.1.1)
     singleton (0.3.0)
-    stringio (3.2.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     text (1.3.1)
     thor (1.4.0)
-    tsort (0.2.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
@@ -261,11 +238,8 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt_pbkdf
-  debug
   ed25519
   openbolt
-  racc
-  rbs
 
 BUNDLED WITH
-   2.5.22
+  4.0.6
