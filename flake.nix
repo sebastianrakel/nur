@@ -21,7 +21,7 @@
             };
           };
           overlay-bundler = final: prev: {
-            bundlerApp = prev.bundlerApp.override { ruby = prev.ruby_4_0; };
+            bundlerApp = prev.bundlerApp.override { ruby = prev.ruby_3_4; };
           };
         in {
 
