@@ -1,3 +1,7 @@
 source "https://rubygems.org"
 
 gem "openvox"
+gem "syslog"
+gem "rbs"
+gem "racc"
+gem "debug"
