@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    logger (1.7.0)
+    puppet-lint (5.1.1)
+    syslog (0.4.0)
+      logger
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  puppet-lint
+  syslog
+
+CHECKSUMS
+  logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
+  puppet-lint (5.1.1) sha256=1e774edbe95c67aae93974416e0d452d6b5fc2c737196a67dd7e5ab548344486
+  syslog (0.4.0) sha256=c4c38ae982fe72903ec41094b5e5f2dcbbc66f510d0225c9702e5e980d827472
+
+BUNDLED WITH
+  4.0.6
