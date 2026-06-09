@@ -1,17 +1,40 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, libxslt, freetype, asciidoc
-, xdotool, xorgserver, xsetroot, xterm, runtimeShell
-, fetchpatch, fetchFromGitHub
-, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  python3,
+  libX11,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXft,
+  libXrender,
+  libXdmcp,
+  libXfixes,
+  libxslt,
+  freetype,
+  asciidoc,
+  xdotool,
+  xorgserver,
+  xsetroot,
+  xterm,
+  runtimeShell,
+  fetchpatch,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm-git";
-  version = "0.9.6-rc1";
-  
+  version = "0.9.7-rc1";
+
   src = fetchFromGitHub {
     owner = "herbstluftwm";
     repo = "herbstluftwm";
     rev = "master";
-    hash = "sha256-Otp8ifYqHSYDVYw09hYvGqZ8DYY1/LDWfGBONOt6vuQ=";
+    hash = "sha256-q8/p6+7675RbDYuJ+5Uky2aQJ5QlLIqp88Kp8sLHLOY=";
   };
 
   outputs = [
@@ -69,7 +92,13 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
+    (python3.withPackages (
+      ps: with ps; [
+        ewmh
+        pytest
+        xlib
+      ]
+    ))
     xdotool
     xorgserver
     xsetroot
