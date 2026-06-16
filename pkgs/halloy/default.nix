@@ -1,23 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, copyDesktopItems, makeDesktopItem, libxkbcommon
-, makeWrapper, nix-update-script, openssl, pkg-config, vulkan-loader, wayland
-, xorg, alsa-lib, pkgs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  libxkbcommon,
+  makeWrapper,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  vulkan-loader,
+  wayland,
+  xorg,
+  alsa-lib,
+  pkgs,
+}:
 
 pkgs.unstable.rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2026.6";
+  version = "2026.7.2";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-5lgsZnjoajYQi7y+ZWhNSc2x9IpxkGEEDTnQC8NJaP4=";
+    hash = "sha256-+qFHwlwRxVN4W9DG+gY5N6um+JARD+3EiLlsD7R9Tpc=";
   };
 
-  cargoHash = "sha256-9EVJGXWE4kfTWs+Ekr13rweH/mcSNG7jmXOMjEMn4hM=";
+  cargoHash = "sha256-/nFtOJXpusIlc7orGv013qzad8fdfQr32c8DAlccHIA=";
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libxkbcommon
     vulkan-loader
@@ -41,23 +62,37 @@ pkgs.unstable.rustPlatform.buildRustPackage rec {
         "x-scheme-handler/ircs"
         "x-scheme-handler/halloy"
       ];
-      categories = [ "Network" "IRCClient" ];
-      keywords = [ "IM" "Chat" ];
+      categories = [
+        "Network"
+        "IRCClient"
+      ];
+      keywords = [
+        "IM"
+        "Chat"
+      ];
       startupWMClass = "org.squidowl.halloy";
     })
   ];
 
-  postFixup = lib.optional stdenv.hostPlatform.isLinux (let
-    rpathWayland = lib.makeLibraryPath [ wayland vulkan-loader libxkbcommon ];
-  in ''
-    rpath=$(patchelf --print-rpath $out/bin/halloy)
-    patchelf --set-rpath "$rpath:${rpathWayland}" $out/bin/halloy
-  '');
+  postFixup = lib.optional stdenv.hostPlatform.isLinux (
+    let
+      rpathWayland = lib.makeLibraryPath [
+        wayland
+        vulkan-loader
+        libxkbcommon
+      ];
+    in
+    ''
+      rpath=$(patchelf --print-rpath $out/bin/halloy)
+      patchelf --set-rpath "$rpath:${rpathWayland}" $out/bin/halloy
+    ''
+  );
 
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"
@@ -75,10 +110,12 @@ pkgs.unstable.rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
-    changelog =
-      "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    maintainers = with maintainers; [
+      fab
+      iivusly
+    ];
     mainProgram = "halloy";
   };
 }
