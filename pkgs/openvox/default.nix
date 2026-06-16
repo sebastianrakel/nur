@@ -1,11 +1,10 @@
-{ bundlerApp, bundlerUpdateScript, lib, testers, }:
-
+{ bundlerApp, lib, pkgs, ... }:
 bundlerApp {
   pname = "openvox";
   gemdir = ./.;
   exes = [ "puppet" ];
 
-  passthru = { updateScript = bundlerUpdateScript "openvox"; };
+  buildInputs = [ pkgs.libyaml pkgs.rubyPackages_4_0.psych ];
 
   meta = {
     description = "Server automation framework and application";

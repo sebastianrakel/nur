@@ -169,10 +169,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "079w2bzwqz32fpba4a8xsbkphsv80jxx42d0ka3k5lf1x0iqvfwi";
+      sha256 = "1adb5lgnczcl26836li52x0g3dcnwkfnra3m9bsb9891jfl9xisc";
       type = "gem";
     };
-    version = "5.6.0";
+    version = "5.6.1";
   };
   openvox = {
     dependencies = ["base64" "benchmark" "concurrent-ruby" "deep_merge" "fast_gettext" "fiddle" "getoptlong" "locale" "openfact" "ostruct" "puppet-resource_api" "racc" "scanf" "semantic_puppet"];
@@ -180,10 +180,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14c6bqfmmqp43z4jpv21g1m5amn3m0anyz3w6zz3v3ci0ma32b7h";
+      sha256 = "0dg8wqy137104r1phy98iq8hhinn145vhs35x5wqwckc0c5ldik8";
       type = "gem";
     };
-    version = "8.26.2";
+    version = "8.27.0";
   };
   ostruct = {
     groups = ["default"];
