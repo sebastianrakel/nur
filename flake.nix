@@ -24,9 +24,6 @@
                 config.allowUnfree = true;
               };
             };
-            overlay-bundler = final: prev: {
-              bundlerApp = prev.bundlerApp.override { ruby = prev.ruby_4_0; };
-            };
           in
           {
 
@@ -35,7 +32,6 @@
               config.allowUnfree = true;
               overlays = [
                 overlay-unstable
-                overlay-bundler
               ];
             };
           };

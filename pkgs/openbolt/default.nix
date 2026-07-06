@@ -1,4 +1,11 @@
-{ bundlerApp, defaultGemConfig, bundlerUpdateScript, lib, makeWrapper, testers,
+{
+  bundlerApp,
+  defaultGemConfig,
+  bundlerUpdateScript,
+  lib,
+  makeWrapper,
+  testers,
+  pkgs,
 }:
 
 (bundlerApp {
@@ -6,7 +13,10 @@
 
   gemdir = ./.;
   exes = [ "bolt" ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkgs.ruby
+  ];
 
   gemConfig = defaultGemConfig // {
     openbolt = attrs: {
@@ -21,17 +31,20 @@
     wrapProgram $out/bin/bolt --set BOLT_GEM 1
   '';
 
-  passthru = { updateScript = bundlerUpdateScript "openbolt"; };
+  passthru = {
+    updateScript = bundlerUpdateScript "openbolt";
+  };
 
   meta = {
     description = "Execute commands remotely over SSH and WinRM";
     homepage = "https://github.com/OpenVoxProject/openbolt";
-    changelog =
-      "https://github.com/OpenVoxProject/openbolt/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/OpenVoxProject/openbolt/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "bolt";
     maintainers = with lib.maintainers; [ sebastianrakel ];
     platforms = lib.platforms.unix;
   };
 }).overrideAttrs
-(old: { name = "openbolt-${(import ./gemset.nix).openbolt.version}"; })
+  (old: {
+    name = "openbolt-${(import ./gemset.nix).openbolt.version}";
+  })

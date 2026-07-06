@@ -1,11 +1,24 @@
-{ bundlerApp, bundlerUpdateScript, lib, }:
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  lib,
+  pkgs,
+}:
 
 bundlerApp {
   pname = "puppet-lint";
   gemdir = ./.;
   exes = [ "puppet-lint" ];
 
-  passthru = { updateScript = bundlerUpdateScript "puppet-lint"; };
+  nativeBuildInputs = [
+    pkgs.ruby
+    pkgs.libyaml
+    pkgs.libffi
+  ];
+
+  passthru = {
+    updateScript = bundlerUpdateScript "puppet-lint";
+  };
 
   meta = {
     description = "Checks Puppet code against the recommended Puppet language style guide";
