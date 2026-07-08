@@ -1,32 +1,52 @@
-{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.hostPlatform.isLinux
-, openssl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildRubyGem,
+  bundlerEnv,
+  ruby_3_4,
+  libarchive,
+  libguestfs,
+  qemu,
+  writeText,
+  withLibvirt ? stdenv.hostPlatform.isLinux,
+  openssl,
 }:
-
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.4.3";
-  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-ZQWdSCV5lBL8XUnOvCFwJAFk+tw30q2lRTHR93qeZ2I=";
+  version = "2.4.9";
+
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "vagrant";
+    rev = "v${version}";
+    hash = "sha256-8csEIkXI5LPf5aZUuKYKALgwtG/skXFvMBimbCerEPY=";
+  };
+
+  ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
-    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 
     inherit ruby;
+    gemdir = src;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
-    gemset = lib.recursiveUpdate (import ./gemset.nix) ({
-      vagrant = {
-        source = {
-          type = "url";
-          inherit url hash;
+    gemset = lib.recursiveUpdate (import ./gemset.nix) (
+      {
+        vagrant = {
+          source = {
+            type = "path";
+            path = src;
+          };
+          inherit version;
+          dontCheckForBrokenSymlinks = true;
         };
-        inherit version;
-      };
-    } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+      }
+      // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix)
+    );
 
     # This replaces the gem symlinks with directories, resolving this
     # error when running vagrant (I have no idea why):
@@ -41,15 +61,14 @@ let
       done
     '';
   };
-
-in buildRubyGem rec {
+in
+buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit version;
+  inherit ruby version src;
 
   doInstallCheck = true;
   dontBuild = false;
-  src = fetchurl { inherit url hash; };
 
   # Some reports indicate that some connection types, particularly
   # WinRM, suffer from "Digest initialization failed" errors. Adding
@@ -57,7 +76,6 @@ in buildRubyGem rec {
   buildInputs = [ openssl ];
 
   patches = [
-    ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
     ./0001-Revert-Merge-pull-request-12225-from-chrisroberts-re.patch
@@ -75,34 +93,39 @@ in buildRubyGem rec {
   #   - qemu: Make 'qemu-img' available for 'vagrant package'
   postInstall =
     let
-      pathAdditions = lib.makeSearchPath "bin"
-        (map (x: lib.getBin x) ([
-          libarchive
-        ] ++ lib.optionals withLibvirt [
-          libguestfs
-          qemu
-        ]));
-    in ''
-    wrapProgram "$out/bin/vagrant" \
-      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' ${pathAdditions} \
-      --set-default VAGRANT_CHECKPOINT_DISABLE 1
+      pathAdditions = lib.makeSearchPath "bin" (
+        map (x: lib.getBin x) (
+          [
+            libarchive
+          ]
+          ++ lib.optionals withLibvirt [
+            libguestfs
+            qemu
+          ]
+        )
+      );
+    in
+    ''
+      wrapProgram "$out/bin/vagrant" \
+        --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
+        --prefix PATH ':' ${pathAdditions} \
+        --set-default VAGRANT_CHECKPOINT_DISABLE 1
 
-    mkdir -p "$out/vagrant-plugins/plugins.d"
-    echo '{}' > "$out/vagrant-plugins/plugins.json"
+      mkdir -p "$out/vagrant-plugins/plugins.d"
+      echo '{}' > "$out/vagrant-plugins/plugins.json"
 
-    # install bash completion
-    mkdir -p $out/share/bash-completion/completions/
-    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
-    # install zsh completion
-    mkdir -p $out/share/zsh/site-functions/
-    cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
-  '' +
-  lib.optionalString withLibvirt ''
-    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
-      --subst-var-by ruby_version ${ruby.version} \
-      --subst-var-by vagrant_version ${version}
-  '';
+      # install bash completion
+      mkdir -p $out/share/bash-completion/completions/
+      cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
+      # install zsh completion
+      mkdir -p $out/share/zsh/site-functions/
+      cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
+    ''
+    + lib.optionalString withLibvirt ''
+      substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+        --subst-var-by ruby_version ${ruby.version} \
+        --subst-var-by vagrant_version ${version}
+    '';
 
   installCheckPhase = ''
     HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
@@ -112,11 +135,11 @@ in buildRubyGem rec {
     inherit ruby deps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ tylerjl ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ tylerjl ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
