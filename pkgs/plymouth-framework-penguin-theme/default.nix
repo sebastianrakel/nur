@@ -10,10 +10,10 @@ stdenvNoCC.mkDerivation {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "ygurin";
+    owner = "sebastianrakel";
     repo = "framework-penguin";
-    rev = "9ec7aa533d43ea8ebbc5ac56c00348f0ce52f172";
-    hash = "sha256-Es8/OUb+Wr7VxdQTtR+IwwJbLaWNmeeOkeZjjcT/e0o=";
+    rev = "ebe3f38af5d41e2d8cbaa9f6a3ca5c1dde76b807";
+    hash = "sha256-BxAQlSqFmMifcv++VVaP/4R10Z/i8ZIferGehbDr8b0=";
   };
 
   dontBuild = true;
